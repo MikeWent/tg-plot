@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+async-cache = "*"
+
+# telegram
+pyrogram = "*"
+tgcrypto = "*"
+
+# web
+fastapi = "*"
+uvicorn = "*"
+gunicorn = "*"
+jinja2 = "*"
+
+# plotting
+plotly = "*"
+pandas = "*"
+
+[dev-packages]
+mypy = "*"
+black = "*"
+
+[requires]
+python_version = "3.11"

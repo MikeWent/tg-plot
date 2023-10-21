@@ -1,0 +1,6 @@
+services:
+  tg-plot:
+    volumes:
+      - type: bind
+        source: ./src
+        target: /app
