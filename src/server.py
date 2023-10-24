@@ -173,7 +173,7 @@ async def plot() -> HTMLResponse:
             name="all",
             x=df["date"],
             y=df["normalized_size"],
-            xbins=dict(size="H12"),
+            xbins=dict(size="D1"),
             opacity=0.15,
         )
     )
