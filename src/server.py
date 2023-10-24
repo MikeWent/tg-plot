@@ -6,6 +6,7 @@ import io
 import re
 import logging
 from dataclasses import dataclass
+from webbrowser import get
 
 import fastapi
 from pyrogram import client, errors, types
@@ -27,12 +28,13 @@ warnings.simplefilter("ignore", category=FutureWarning)
 API_ID = getenv("TELEGRAM_API_ID")
 API_HASH = getenv("TELEGRAM_API_HASH")
 CHANNEL_ID = getenv("TELEGRAM_CHANNEL_ID")
+APP_SECRET_KEY = getenv("APP_SECRET_KEY")
 DATA_DIR = getenv("DATA_DIR") or "./data/"
 assert API_ID
 assert API_HASH
 assert CHANNEL_ID
+assert APP_SECRET_KEY
 CHANNEL_ID = int(CHANNEL_ID)
-
 APP_NAME = "tg-plot"
 
 
@@ -53,7 +55,7 @@ async def lifespan(app: fastapi.FastAPI):
 
 # web
 fastapi_app = fastapi.FastAPI(lifespan=lifespan)
-fastapi_app.add_middleware(SessionMiddleware, secret_key="some-random-string")
+fastapi_app.add_middleware(SessionMiddleware, secret_key=APP_SECRET_KEY)
 fastapi_app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
