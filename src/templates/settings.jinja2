@@ -1,0 +1,20 @@
+{% extends "base.jinja2" %}
+
+{% block main %}
+
+<form action="POST">
+
+    <label>Telegram API ID: </label>
+    <input name="telegram_api_id" value="{{ telegram_api_id }}">
+
+    <label>Telegram API HASH: </label>
+    <input name="telegram_api_hash" value="{{ telegram_api_hash }}">
+
+    <label>Telegram Channel ID: </label>
+    <input name="telegram_channel_id" value="{{ telegram_channel_id }}">
+
+    <input type="submit" value="Save">
+</form>
+
+
+{% endblock main %}

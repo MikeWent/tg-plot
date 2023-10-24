@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from datetime import datetime
+from enum import Enum
 from os import getenv, remove
 import io
 import re
@@ -13,6 +14,7 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from cache import AsyncTTL
+from starlette.middleware.sessions import SessionMiddleware
 
 import pandas as pd
 import plotly.express as px
@@ -49,10 +51,41 @@ async def lifespan(app: fastapi.FastAPI):
     await tg.stop()
 
 
-# web server
+# web
 fastapi_app = fastapi.FastAPI(lifespan=lifespan)
+fastapi_app.add_middleware(SessionMiddleware, secret_key="some-random-string")
 fastapi_app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+
+
+# web flash message functionality
+class FlashMessageCategory(str, Enum):
+    error = "error"
+    warning = "warning"
+    info = "info"
+    success = "success"
+
+
+@dataclass
+class FlashMessage:
+    category: FlashMessageCategory
+    title: str
+    text: str
+
+
+def flash(request: fastapi.Request, message: FlashMessage) -> None:
+    if "_messages" not in request.session:
+        request.session["_messages"] = []
+    request.session["_messages"].append(message.__dict__)
+
+
+def get_flashed_messages(request: fastapi.Request):
+    messages = request.session.pop("_messages", [])
+    messages = [FlashMessage(**x) for x in messages]
+    return messages
+
+
+templates.env.globals["get_flashed_messages"] = get_flashed_messages
 
 # global logger
 logger = logging.getLogger("uvicorn")
@@ -123,8 +156,8 @@ async def display_fetched_messages():
 
 
 # plot
-@fastapi_app.get("/plot")
-async def plot() -> HTMLResponse:
+@fastapi_app.get("/plot", response_class=HTMLResponse)
+async def plot(request: fastapi.Request):
     entries = await fetch_messages()
 
     # when you have
@@ -185,6 +218,19 @@ async def plot() -> HTMLResponse:
         include_plotlyjs="cdn",
         full_html=False,
     )
-    html = buffer.getvalue().encode()
+    plot_html = buffer.getvalue()
 
-    return HTMLResponse(content=html)
+    return templates.TemplateResponse(
+        name="plot.jinja2",
+        context=dict(request=request, plot=plot_html, title=f"Plot for {CHANNEL_ID}"),
+    )
+
+
+@fastapi_app.get("/messages", response_class=HTMLResponse)
+def get_all_messages(request: fastapi.Request):
+    return templates.TemplateResponse(name="base.jinja2", context=dict(request=request))
+
+
+@fastapi_app.post("/messages")
+def add_new_message(request: fastapi.Request, message: FlashMessage):
+    flash(request=request, message=message)
