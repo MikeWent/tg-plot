@@ -71,9 +71,7 @@ async def plot(request: fastapi.Request):
     entries = await get_entries(messages)
     normalized = await get_normalized_entries(entries)
     plot_html = await get_plot_html(normalized)
-    return templates.TemplateResponse(
-        name="plot.jinja2", context=dict(request=request, plot_html=plot_html)
-    )
+    return HTMLResponse(content=plot_html)
 
 
 @fastapi_app.get("/messages", response_class=HTMLResponse)
