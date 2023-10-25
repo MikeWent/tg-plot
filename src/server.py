@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
-from enum import Enum
 import logging
 from dataclasses import dataclass
+from enum import Enum
 from os import getenv
-import fastapi
-from cache import AsyncTTL
 
-from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, StreamingResponse
+import fastapi
+from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
+
 from services.entries import get_entries
 from services.messages import get_messages
 from services.normalization import get_normalized_entries
 from services.plot import get_plot_html
-
 
 APP_SECRET_KEY = getenv("APP_SECRET_KEY")
 assert APP_SECRET_KEY

@@ -1,10 +1,10 @@
 import io
+import logging
+import warnings
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
-import warnings
-import logging
-
 
 logger = logging.getLogger(__name__)
 
