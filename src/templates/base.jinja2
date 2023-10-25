@@ -20,7 +20,9 @@
     {% if messages %}
     <ul class="flashes">
       {% for message in messages %}
-      <li class="message {{message.category }}"><b>{{ message.title }}</b> {{ message.text }}</li>
+      <p>
+        <span class="toast {{message.category }}"><b>{{ message.title }}</b> {{ message.text }}</span>
+      </p>
       {% endfor %}
     </ul>
     {% endif %}

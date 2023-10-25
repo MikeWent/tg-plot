@@ -1,20 +1,47 @@
 {% extends "base.jinja2" %}
 
 {% block main %}
+<div class="container">
+    <div class="row">
+        <form method="POST">
+            <h2>Telegram settings</h2>
 
-<form action="POST">
+            <p>Get these from <a href="https://my.telegram.org/apps" target="_blank">my.telegram.org/apps</a></p>
 
-    <label>Telegram API ID: </label>
-    <input name="telegram_api_id" value="{{ telegram_api_id }}">
+            <div class="input-group fluid">
+                <label>API ID: </label>
+                <input name="telegram_api_id" value="{{ settings.telegram_api_id or '' }}">
+            </div>
 
-    <label>Telegram API HASH: </label>
-    <input name="telegram_api_hash" value="{{ telegram_api_hash }}">
+            <div class="input-group fluid">
+                <label>API hash: </label>
+                <input name="telegram_api_hash" value="{{ settings.telegram_api_hash or '' }}">
+            </div>
 
-    <label>Telegram Channel ID: </label>
-    <input name="telegram_channel_id" value="{{ telegram_channel_id }}">
+            <br>
+            <h2>Channel settings</h2>
+            <p>
+                Forward a channel message to <a href="https://t.me/myidbot" target="_blank">@myidbot</a>
+            </p>
+            <div class="input-group fluid">
+                <label>Channel ID: </label>
+                <input name="telegram_channel_id" value="{{ settings.telegram_channel_id or '' }}"
+                    placeholder="-1000000000">
+            </div>
 
-    <input type="submit" value="Save">
-</form>
+            <br>
+            <h2>Password</h2>
+            <p>Required to access and change settings. </p>
+            <div class="input-group fluid">
+                <label>New password: </label>
+                <input name="admin_password" type="password">
+            </div>
 
+            <br>
+            <input type="submit" class="inverse" value="Save" />
+
+        </form>
+    </div>
+</div>
 
 {% endblock main %}

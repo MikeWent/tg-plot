@@ -5,12 +5,7 @@ services:
     restart: unless-stopped
     ports:
       - 8000:8000
-    env_file:
-      - secrets.env
     volumes:
-      - tg-plot-data:/app/data:rw
+      - ./data:/app/data:rw
     stdin_open: true 
     tty: true
-
-volumes:
-  tg-plot-data:
