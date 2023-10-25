@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 warnings.simplefilter("ignore", category=FutureWarning)
 
 
-async def get_plot(data: pd.DataFrame):
-    logger.info(data)
+async def get_plot_html(data: pd.DataFrame) -> str:
+    logger.debug(data)
     # draw the main scatter plot
     fig = px.scatter(
         data_frame=data,
@@ -48,12 +48,16 @@ async def get_plot(data: pd.DataFrame):
         )
     )
 
+    # fix size
+    fig.update_layout(autosize=True)
+
     # output HTML
     buffer = io.StringIO()
     fig.write_html(
         file=buffer,
         include_plotlyjs="cdn",
         full_html=False,
+        div_id="plot",
     )
     plot_html = buffer.getvalue()
     return plot_html

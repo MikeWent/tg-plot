@@ -1,6 +1,7 @@
 import logging
 from os import getenv
-from pyrogram import client
+from pyrogram import client, types
+from cache import AsyncTTL
 
 logger = logging.getLogger(__name__)
 
@@ -19,11 +20,11 @@ APP_NAME = "tg-plot"
 tg = client.Client(APP_NAME, api_id=API_ID, api_hash=API_HASH, workdir=DATA_DIR)
 
 
-async def get_messages():
-    async def message_generator():
-        async with tg:
-            async for msg in tg.get_chat_history(chat_id=CHANNEL_ID, limit=100):  # type: ignore
-                if hasattr(msg, "text") and msg.text:
-                    yield msg
-
-    return message_generator()
+@AsyncTTL(time_to_live=120)
+async def get_messages() -> list[types.Message]:
+    async with tg:
+        messages = []
+        async for msg in tg.get_chat_history(chat_id=CHANNEL_ID, limit=100):  # type: ignore
+            if hasattr(msg, "text") and msg.text:
+                messages.append(msg)
+        return messages

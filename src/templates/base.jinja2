@@ -8,11 +8,12 @@
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="https://cdn.rawgit.com/Chalarangelo/mini.css/v3.0.1/dist/mini-default.min.css">
-  <link rel="static/style.css">
+  <link rel="stylesheet" href="/static/style.css">
 </head>
 
 <body>
-  <main>
+
+  <head>
     <h1>{{ title }}</h1>
 
     {% with messages = get_flashed_messages(request) %}
@@ -24,7 +25,8 @@
     </ul>
     {% endif %}
     {% endwith %}
-
+  </head>
+  <main>
     {% block main %}
     {% endblock %}
   </main>

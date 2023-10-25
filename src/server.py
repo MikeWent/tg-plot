@@ -13,8 +13,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from services.entries import get_entries
 from services.messages import get_messages
 from services.normalization import get_normalized_entries
-
-from services.plot import get_plot
+from services.plot import get_plot_html
 
 
 APP_SECRET_KEY = getenv("APP_SECRET_KEY")
@@ -66,51 +65,15 @@ async def index() -> str:
 
 
 # plot
-
-
-@fastapi_app.get("/plot")
-async def plot(request: fastapi.Request) -> StreamingResponse:
-    async def progressive_html():
-        # send start of HTML so browser could start drawing elements
-        yield """
-        <html>
-            <head>
-                <style>
-                    body {font-size: 1rem; font-family: monospace}
-                    .log{margin: 1rem}
-                </style>
-            </head>
-            </body>
-                <div class="log">
-        """
-
-        br = "<br>\n"
-        yield "connecting to telegram..." + br
-        messages = []
-        async for msg in await get_messages():
-            messages.append(msg)
-            yield msg.text + br
-
-        yield "parsing messages..." + br
-        entries = await get_entries(messages)
-
-        yield "normalizing data..." + br
-        data = await get_normalized_entries(entries)
-
-        yield "drawing a plot..." + br
-        plot = await get_plot(data)
-
-        # hide the log
-        yield """
-                </div>
-                <style>.log{display:none}</style>
-        """
-        yield plot
-        yield """
-            </body>
-        </html>"""
-
-    return StreamingResponse(progressive_html(), media_type="text/html")
+@fastapi_app.get("/plot", response_class=HTMLResponse)
+async def plot(request: fastapi.Request):
+    messages = await get_messages()
+    entries = await get_entries(messages)
+    normalized = await get_normalized_entries(entries)
+    plot_html = await get_plot_html(normalized)
+    return templates.TemplateResponse(
+        name="plot.jinja2", context=dict(request=request, plot_html=plot_html)
+    )
 
 
 @fastapi_app.get("/messages", response_class=HTMLResponse)

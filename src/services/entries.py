@@ -24,7 +24,7 @@ async def get_entries(messages: list[types.Message]) -> list[Entry]:
         for line in message.text.splitlines():
             # 12:34 herbs 1g
             match = re.findall(r"(..:..) ([^\s]+) ?(.*)", line)
-            logger.info("text: '%s', match: %s" % (line, match))
+            logger.debug("text: '%s', match: %s" % (line, match))
 
             # verify that we have a match and 3 groups
             if not len(match) == 1 or not len(groups := match[0]) == 3:
