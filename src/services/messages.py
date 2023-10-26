@@ -3,7 +3,7 @@ import logging
 from cache import AsyncTTL
 from pyrogram import client, types
 
-from services.settings import settings
+from helpers.settings import settings
 
 logger = logging.getLogger(__name__)
 

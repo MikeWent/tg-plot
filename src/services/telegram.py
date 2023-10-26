@@ -2,7 +2,7 @@ import logging
 
 from pyrogram import client
 
-from services.settings import settings
+from helpers.settings import settings
 
 logger = logging.getLogger(__name__)
 
