@@ -7,7 +7,7 @@ from services.entries import Entry
 logger = logging.getLogger(__name__)
 
 
-async def get_normalized_entries(entries: list[Entry]):
+async def get_normalized_entries(entries: list[Entry]) -> pd.DataFrame:
     df = pd.DataFrame(entries)
     # when you have
     #
