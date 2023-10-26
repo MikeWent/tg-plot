@@ -5,7 +5,7 @@ from enum import Enum
 from typing import Annotated
 
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -16,6 +16,7 @@ from services.messages import get_messages
 from services.normalization import get_normalized_entries
 from services.plot import get_plot_html
 from services.settings import settings
+from services.telegram import get_telegram_client
 
 logger = logging.getLogger(__name__)
 
@@ -29,17 +30,17 @@ security = HTTPBasic()
 
 # web flash message functionality
 class FlashMessageCategory(str, Enum):
-    error = "error"
-    warning = "warning"
-    info = "info"
-    success = "success"
+    error = "❌"
+    warning = "⚠️"
+    info = "ℹ️"
+    success = "✅"
 
 
 @dataclass
 class FlashMessage:
     category: FlashMessageCategory
-    title: str
-    text: str
+    title: str | None = None
+    text: str | None = None
 
 
 def flash_message(request: Request, message: FlashMessage) -> None:
@@ -55,18 +56,29 @@ def get_flashed_messages(request: Request):
 
 
 templates.env.globals["get_flashed_messages"] = get_flashed_messages
+templates.env.globals["settings"] = settings
 
 
 # index
 @fastapi_app.get("/")
-async def index() -> str:
-    return "https://github.com/MikeWent/tg-plot"
+async def index():
+    return RedirectResponse(url="/plot")
 
 
 # plot
 @fastapi_app.get("/plot", response_class=HTMLResponse)
 async def plot(request: Request):
-    messages = await get_messages()
+    telegram_client = await get_telegram_client()
+    if not telegram_client:
+        flash_message(
+            request=request,
+            message=FlashMessage(
+                category=FlashMessageCategory.warning,
+                title="Enter Telegram and Channel settings first",
+            ),
+        )
+        return RedirectResponse(url="/settings")
+    messages = await get_messages(telegram_client)
     entries = await get_entries(messages)
     normalized = await get_normalized_entries(entries)
     plot_html = await get_plot_html(normalized)
@@ -75,7 +87,9 @@ async def plot(request: Request):
 
 # settings
 def auth_required(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
-    if not str(credentials.password) == (settings.admin_password):
+    if settings.admin_password and str(credentials.password) != (
+        settings.admin_password
+    ):
         raise HTTPException(
             status_code=401,
             headers={"WWW-Authenticate": "Basic"},
@@ -108,9 +122,8 @@ async def update_settings(
     flash_message(
         request=request,
         message=FlashMessage(
-            category=FlashMessageCategory.info,
+            category=FlashMessageCategory.success,
             title="Settings updated",
-            text="and applied.",
         ),
     )
     return await show_settings(request=request)

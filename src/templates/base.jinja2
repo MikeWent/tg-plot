@@ -13,25 +13,32 @@
 
 <body>
 
-  <head>
-    <h1>{{ title }}</h1>
-
-    {% with messages = get_flashed_messages(request) %}
-    {% if messages %}
-    <ul class="flashes">
-      {% for message in messages %}
-      <p>
-        <span class="toast {{message.category }}"><b>{{ message.title }}</b> {{ message.text }}</span>
-      </p>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-  </head>
+  <header>
+    <a href="/" class="logo">{{ settings.app_name }}</a>
+    <a href="/plot" class="button">Plot</a>
+    <a href="/settings" class="button">Settings</a>
+    <a href="https://github.com/MikeWent/tg-plot" class="button">GitHub</a>
+  </header>
   <main>
+    <h1>{{ title }}</h1>
     {% block main %}
     {% endblock %}
   </main>
+
+  {% with messages = get_flashed_messages(request) %}
+  {% if messages %}
+  <div class="flashes">
+    {% for message in messages %}
+    <p>
+    <div class="toast ">
+      <b>{{ message.category.value or message.category }} {{ ' ' + message.title if message.title }}</b><br>
+      {{message.text or ''}}
+    </div>
+    </p>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
 </body>
 
 </html>
