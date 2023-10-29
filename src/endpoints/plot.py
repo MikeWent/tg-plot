@@ -3,7 +3,6 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.routing import APIRouter
 
 from helpers.auth import auth_required
-from helpers.templates import templates
 from services.entries import get_entries
 from services.messages import get_messages
 from services.normalization import get_normalized_entries
@@ -25,13 +24,11 @@ async def show_plot(request: Request):
         normalized = await get_normalized_entries(entries)
         cached_plot_html = await get_plot_html(normalized)
 
-    return templates.TemplateResponse(
-        "plot.jinja2", context=dict(request=request, plot_html=cached_plot_html)
-    )
+    return cached_plot_html
 
 
 @router.get("/update")
 async def update_plot(request: Request, auth=Depends(auth_required)):
     global cached_plot_html
     cached_plot_html = None
-    return RedirectResponse("/")
+    return RedirectResponse("/plot")

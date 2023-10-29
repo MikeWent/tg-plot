@@ -7,11 +7,14 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 
 import errors
+
 from endpoints.plot import router as plot_router
 from endpoints.settings import router as settings_router
 from endpoints.telegram import router as telegram_router
+
 from helpers.flash import FlashMessage, FlashMessageCategory, flash_message
 from helpers.settings import settings
+from helpers.templates import templates
 
 logger = logging.getLogger(__name__)
 
@@ -28,8 +31,8 @@ fastapi_app.include_router(telegram_router, prefix="/telegram")
 
 # index
 @fastapi_app.get("/")
-async def index():
-    return RedirectResponse(url="/plot")
+async def index(request: Request):
+    return templates.TemplateResponse("index.jinja2", context=dict(request=request))
 
 
 # exceptions
