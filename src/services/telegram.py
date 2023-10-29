@@ -2,7 +2,7 @@ import logging
 
 from telethon import TelegramClient
 
-from errors import SettingsAreEmpty, TelegramNotAuthorized
+from errors import SettingsAreEmpty
 from helpers.settings import settings
 
 logger = logging.getLogger(__name__)

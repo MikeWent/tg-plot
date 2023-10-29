@@ -1,14 +1,13 @@
-from fastapi import Request, Depends, Form
-from fastapi.responses import HTMLResponse
-from fastapi.routing import APIRouter
 from dataclasses import dataclass
 
+from fastapi import Depends, Form, Request
+from fastapi.responses import HTMLResponse
+from fastapi.routing import APIRouter
 from telethon import TelegramClient, errors
 
-from helpers.templates import templates
 from helpers.auth import auth_required
 from helpers.flash import FlashMessage, FlashMessageCategory, flash_message
-from helpers.settings import settings
+from helpers.templates import templates
 from services.telegram import get_telegram_client
 
 router = APIRouter(dependencies=[Depends(auth_required)])
