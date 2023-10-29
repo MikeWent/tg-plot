@@ -12,7 +12,7 @@ requirements:
 1. build and run tg-plot
     ```
     export DOCKER_HOST=ssh://server
-    docker compose up --build
+    docker compose up --build --detach
     ```
 2. go to `http://server:8000`
 
