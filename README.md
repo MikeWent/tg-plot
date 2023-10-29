@@ -16,6 +16,14 @@ requirements:
     ```
 2. go to `http://server:8000`
 
+## development
+
+```
+pipenv install --dev && pipenv requirements > requirements.txt
+
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+```
+
 ## License
 
 MIT
