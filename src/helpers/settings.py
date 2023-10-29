@@ -20,6 +20,7 @@ class Settings:
         self.app_name: str = "tg-plot"
         self.app_secret_key: str = random_string(32)
         self.app_data_dir: str = "./data/"
+
         self.admin_password: str = ""
 
         self.telegram_api_id: int = 0

@@ -31,7 +31,8 @@
             <p>Update plot, access & change settings.</p>
             <div class="input-group fluid">
                 <label>New password: </label>
-                <input name="admin_password" type="password" autocomplete="off">
+                <input name="admin_password" type="password" autocomplete="off"
+                    placeholder="{{ settings.admin_password|length * '*' }}">
             </div>
 
             <br>
