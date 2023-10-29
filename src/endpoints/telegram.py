@@ -65,7 +65,7 @@ async def telegram_auth_step(
                 title="Telegram authenticated",
             ),
         )
-        return RedirectResponse("/")
+        return RedirectResponse("/", status_code=302)
 
     return templates.TemplateResponse(
         name="telegram.jinja2", context=dict(request=request, field=field)
