@@ -4,5 +4,5 @@ class TelegramNotAuthorized(Exception):
 
 
 class SettingsAreEmpty(Exception):
-    text = "Update Telegram settings"
+    text = "Set Telegram & Channel settings"
     pass

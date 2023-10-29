@@ -24,7 +24,7 @@ class Settings:
 
         self.telegram_api_id: int = 0
         self.telegram_api_hash: str = ""
-        self.telegram_channel_id: int = -1
+        self.telegram_channel_id: int = -0
 
     def __init__(self, filename: str) -> None:
         self._filename = filename
