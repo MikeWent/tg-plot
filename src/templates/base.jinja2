@@ -15,8 +15,8 @@
 
   <header>
     <a href="/" class="logo">{{ settings.app_name }}</a>
-    <a href="/plot" class="button">Plot</a>
-    <a href="/settings" class="button">Settings</a>
+    <a href="{{ url_for('show_settings') }}" class="button">Settings</a>
+    <a href="{{ url_for('update_plot') }}" class="button">Update</a>
     <a href="https://github.com/MikeWent/tg-plot" class="button">GitHub</a>
   </header>
   <main>

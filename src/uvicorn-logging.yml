@@ -23,7 +23,7 @@ loggers:
       - default
     propagate: no
   uvicorn.access:
-    level: INFO
+    level: WARNING
     handlers:
       - access
     propagate: no

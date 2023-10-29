@@ -1,0 +1,38 @@
+{% extends "base.jinja2" %}
+
+{% block main %}
+<div class="container">
+    <div class="row">
+        <form method="POST">
+            <h2>Telegram auth</h2>
+
+            {% if field == "phone" %}
+            <div class="input-group fluid">
+                <label>Phone: </label>
+                <input name="phone">
+            </div>
+            {% endif %}
+
+            {% if field == "code" %}
+            <div class="input-group fluid">
+                <label>Code: </label>
+                <input name="code">
+            </div>
+            {% endif %}
+
+            {% if field == "password" %}
+            <div class="input-group fluid">
+                <label>2FA password: </label>
+                <input name="password" type="password">
+            </div>
+            {% endif %}
+
+
+            {% if field %}
+            <input type="submit" class="primary" value="Submit" />
+            {% endif %}
+
+        </form>
+    </div>
+</div>
+{% endblock main %}

@@ -13,6 +13,7 @@ warnings.simplefilter("ignore", category=FutureWarning)
 
 async def get_plot_html(data: pd.DataFrame) -> str:
     logger.debug(data)
+
     # draw the main scatter plot
     fig = px.scatter(
         data_frame=data,
@@ -47,9 +48,6 @@ async def get_plot_html(data: pd.DataFrame) -> str:
             opacity=0.15,
         )
     )
-
-    # fix size
-    fig.update_layout(autosize=True)
 
     # output HTML
     buffer = io.StringIO()

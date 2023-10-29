@@ -1,18 +1,16 @@
 import logging
 
-from cache import AsyncTTL
-from pyrogram import client, types
+from telethon import TelegramClient, types
 
 from helpers.settings import settings
 
 logger = logging.getLogger(__name__)
 
 
-@AsyncTTL(time_to_live=120)
-async def get_messages(tg: client.Client) -> list[types.Message]:
+async def get_messages(tg: TelegramClient) -> list[types.Message]:
     async with tg:
         messages = []
-        async for msg in tg.get_chat_history(chat_id=settings.telegram_channel_id, limit=100):  # type: ignore
-            if hasattr(msg, "text") and msg.text:
+        async for msg in tg.iter_messages(entity=types.PeerChannel(channel_id=settings.telegram_channel_id), limit=100):  # type: ignore
+            if hasattr(msg, "message") and msg.message:
                 messages.append(msg)
         return messages

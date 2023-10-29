@@ -1,3 +1,9 @@
-main {
-  min-height: max-content;
+html,
+body {
+  height: 100%;
+}
+
+#plot-container,
+#plot-container > div {
+  height: 85vh;
 }

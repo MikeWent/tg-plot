@@ -3,7 +3,7 @@ import re
 from dataclasses import dataclass
 from datetime import datetime
 
-from pyrogram import types
+from telethon import types
 
 logger = logging.getLogger(__name__)
 
@@ -18,9 +18,10 @@ class Entry:
 async def get_entries(messages: list[types.Message]) -> list[Entry]:
     entries = []
     for message in messages:
-        if not message.text:
+        if not message.message or not message.date:
             continue
-        for line in message.text.splitlines():
+        logger.debug(message.message)
+        for line in message.message.splitlines():
             # 12:34 herbs 1g
             match = re.findall(r"(..:..) ([^\s]+) ?(.*)", line)
             logger.debug("text: '%s', match: %s" % (line, match))

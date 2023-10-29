@@ -22,9 +22,9 @@ class Settings:
         self.app_data_dir: str = "./data/"
         self.admin_password: str = ""
 
-        self.telegram_api_id: int | None = None
-        self.telegram_api_hash: str | None = None
-        self.telegram_channel_id: int | None = None
+        self.telegram_api_id: int = 0
+        self.telegram_api_hash: str = ""
+        self.telegram_channel_id: int = -1
 
     def __init__(self, filename: str) -> None:
         self._filename = filename
