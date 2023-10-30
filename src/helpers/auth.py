@@ -1,5 +1,5 @@
 from hashlib import sha256
-from typing import Annotated, Coroutine
+from typing import Annotated
 
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
