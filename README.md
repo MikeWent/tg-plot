@@ -2,6 +2,8 @@
 
 generate a visual plot from a list of messages in telegram channel.
 
+![generated plot](screenshots/plot.jpg)
+
 ## run
 
 requirements:
