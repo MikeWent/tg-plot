@@ -4,7 +4,7 @@ from fastapi import Depends, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRouter
 
-from helpers.auth import auth_required
+from helpers.auth import auth_required, set_password
 from helpers.flash import FlashMessage, FlashMessageCategory, flash_message
 from helpers.settings import settings
 from helpers.templates import templates
@@ -32,7 +32,9 @@ async def update_settings(
     request: Request,
     submitted_settings: SubmittedSettingsForm = Depends(),
 ):
-    settings.__dict__.update(submitted_settings.__dict__)
+    if submitted_settings.admin_password:
+        set_password(submitted_settings.admin_password)
+    settings.update(submitted_settings.__dict__)
     settings.save()
     flash_message(
         request=request,

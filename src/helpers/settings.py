@@ -21,7 +21,7 @@ class Settings:
         self.app_secret_key: str = random_string(32)
         self.app_data_dir: str = "./data/"
 
-        self.admin_password: str = ""
+        self.admin_password_hash: str = ""
 
         self.telegram_api_id: int = 0
         self.telegram_api_hash: str = ""
@@ -36,6 +36,11 @@ class Settings:
         except FileNotFoundError:
             # create a file
             self.save()
+
+    def update(self, new_settings: dict):
+        for k, v in new_settings.items():
+            if hasattr(self, k):
+                setattr(self, k, v)
 
     def save(self):
         with self._lock:
