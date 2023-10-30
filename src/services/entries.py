@@ -29,14 +29,17 @@ def make_entry(original_message: types.Message, line: str) -> Entry | None:
         return
     exact_time, substance, amount = match[0]
     # convert amount to number without units
-    try:
-        # match only digits, dots and commas
-        digits = re.findall(r"[\d\.,]*", amount)
-        if digits:
-            # 1.25gr -> 1.25
-            amount = float(digits[0])
-    except ValueError:
-        logger.warn("unable to convert '%s' to number" % amount)
+    if amount:
+        try:
+            # match only digits, dots and commas
+            digits = re.findall(r"[\d\.,]*", amount)
+            if digits:
+                # 1.25gr -> 1.25
+                amount = float(digits[0])
+        except ValueError:
+            logger.debug("unable to convert '%s' to number" % amount)
+            amount = 1.00
+    else:
         amount = 1.00
 
     return Entry(
