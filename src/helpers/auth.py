@@ -1,10 +1,10 @@
+from hashlib import sha256
 from typing import Annotated
 
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 from helpers.settings import settings
-from hashlib import sha256
 
 security = HTTPBasic()
 
@@ -18,12 +18,19 @@ def set_password(password: str) -> None:
     settings.save()
 
 
-def auth_required(credentials: Annotated[HTTPBasicCredentials, Depends(security)]):
-    if (
-        settings.admin_password_hash
-        and password_hash(credentials.password) != settings.admin_password_hash
+def auth_required(view: bool = False):
+    async def _auth_required(
+        credentials: Annotated[HTTPBasicCredentials, Depends(security)]
     ):
-        raise HTTPException(
-            status_code=401,
-            headers={"WWW-Authenticate": "Basic"},
-        )
+        if (
+            settings.admin_password_hash
+            and password_hash(credentials.password) != settings.admin_password_hash
+        ):
+            raise HTTPException(
+                status_code=401,
+                headers={"WWW-Authenticate": "Basic"},
+            )
+
+    if view and not settings.view_password_required:
+        return
+    return _auth_required

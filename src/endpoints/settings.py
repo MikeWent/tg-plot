@@ -9,7 +9,7 @@ from helpers.flash import FlashMessage, FlashMessageCategory, flash_message
 from helpers.settings import settings
 from helpers.templates import templates
 
-router = APIRouter(dependencies=[Depends(auth_required)])
+router = APIRouter(dependencies=[Depends(auth_required())])
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -25,6 +25,7 @@ class SubmittedSettingsForm:
     telegram_api_hash: str | None = Form(None)
     telegram_channel_id: int | None = Form(None)
     admin_password: str | None = Form(None)
+    view_password_required: bool | None = Form(None)
 
 
 @router.post("/")

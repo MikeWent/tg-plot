@@ -31,11 +31,15 @@
             <p>Update plot, access & change settings.</p>
             <div class="input-group fluid">
                 <label>New password: </label>
-                <input name="admin_password" type="password" autocomplete="off">
+                <input name="admin_password" type="password">
             </div>
+            <label>Require password to <strong>view</strong> the plot</label>
+            <select name="view_password_required">
+                <option value="true" {% if settings.view_password_required %}selected{% endif%}>Yes</option>
+                <option value="false" {% if not settings.view_password_required %}selected{% endif%}>No</option>
+            </select>
 
             <br>
-
 
             <input type="submit" class="inverse" value="Save" />
 

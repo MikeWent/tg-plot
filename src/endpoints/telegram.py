@@ -10,7 +10,7 @@ from helpers.flash import FlashMessage, FlashMessageCategory, flash_message
 from helpers.templates import templates
 from services.telegram import get_base_telegram_client
 
-router = APIRouter(dependencies=[Depends(auth_required)])
+router = APIRouter(dependencies=[Depends(auth_required())])
 
 
 @dataclass

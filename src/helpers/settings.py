@@ -22,6 +22,7 @@ class Settings:
         self.app_data_dir: str = "./data/"
 
         self.admin_password_hash: str = ""
+        self.view_password_required: bool = False
 
         self.telegram_api_id: int = 0
         self.telegram_api_hash: str = ""
