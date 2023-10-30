@@ -30,9 +30,9 @@ async def get_plot_html(data: pd.DataFrame) -> str:
         rangeselector=dict(
             buttons=list(
                 [
-                    dict(count=1, label="1D", step="day", stepmode="backward"),
-                    dict(count=7, label="7D", step="day", stepmode="backward"),
-                    dict(count=1, label="1M", step="month", stepmode="todate"),
+                    dict(count=7, label="7D", step="day", stepmode="todate"),
+                    dict(count=14, label="14D", step="day", stepmode="todate"),
+                    dict(count=30, label="1M", step="day", stepmode="todate"),
                     dict(step="all"),
                 ]
             )
