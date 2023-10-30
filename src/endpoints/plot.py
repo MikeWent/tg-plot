@@ -3,6 +3,8 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.routing import APIRouter
 
 from helpers.auth import auth_required
+from helpers.flash import FlashMessageCategory, flash_message, FlashMessage
+
 from services.entries import get_entries
 from services.messages import get_messages
 from services.normalization import get_normalized_entries
@@ -31,4 +33,12 @@ async def show_plot(request: Request):
 async def update_plot(request: Request, auth=Depends(auth_required)):
     global cached_plot_html
     cached_plot_html = None
-    return RedirectResponse("/plot")
+    await show_plot(request=request)
+    flash_message(
+        request=request,
+        message=FlashMessage(
+            category=FlashMessageCategory.success,
+            title="Plot updated",
+        ),
+    )
+    return RedirectResponse("/")
