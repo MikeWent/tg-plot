@@ -1,5 +1,5 @@
 from hashlib import sha256
-from typing import Annotated
+from typing import Annotated, Coroutine
 
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
@@ -22,6 +22,8 @@ def auth_required(view: bool = False):
     async def _auth_required(
         credentials: Annotated[HTTPBasicCredentials, Depends(security)]
     ):
+        if view and (not settings.view_password_required):
+            return
         if (
             settings.admin_password_hash
             and password_hash(credentials.password) != settings.admin_password_hash
@@ -31,6 +33,4 @@ def auth_required(view: bool = False):
                 headers={"WWW-Authenticate": "Basic"},
             )
 
-    if view and not settings.view_password_required:
-        return
     return _auth_required

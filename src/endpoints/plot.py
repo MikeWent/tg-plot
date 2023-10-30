@@ -16,7 +16,7 @@ cached_plot_html = None
 
 
 @router.get("/", response_class=HTMLResponse)
-async def show_plot(request: Request, auth=Depends(auth_required(view=True))):
+async def show_plot(auth=Depends(auth_required(view=True))):
     global cached_plot_html
     if not cached_plot_html:
         telegram_client = await get_telegram_client()
@@ -32,7 +32,7 @@ async def show_plot(request: Request, auth=Depends(auth_required(view=True))):
 async def update_plot(request: Request, auth=Depends(auth_required())):
     global cached_plot_html
     cached_plot_html = None
-    await show_plot(request=request)
+    await show_plot()
     flash_message(
         request=request,
         message=FlashMessage(
