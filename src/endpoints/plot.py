@@ -2,7 +2,7 @@ from fastapi import Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.routing import APIRouter
 
-from helpers.auth import auth_required
+from middleware.auth import auth_required
 from helpers.flash import FlashMessage, FlashMessageCategory, flash_message
 from services.entries import get_entries
 from services.messages import get_messages

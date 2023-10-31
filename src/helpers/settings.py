@@ -19,7 +19,6 @@ class Settings:
     def default(self):
         self.app_name: str = "tg-plot"
         self.app_secret_key: str = random_string(32)
-        self.app_data_dir: str = "./data/"
 
         self.admin_password_hash: str = ""
         self.view_password_required: bool = False
@@ -57,7 +56,7 @@ class Settings:
                 loaded: dict = json.load(f)
                 loaded.pop("_filename", None)
                 loaded.pop("_lock", None)
-                self.__dict__.update(loaded)
+                self.update(loaded)
 
 
 settings = Settings(SETTINGS_FILE)

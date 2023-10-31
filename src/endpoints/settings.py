@@ -4,7 +4,7 @@ from fastapi import Depends, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.routing import APIRouter
 
-from helpers.auth import auth_required, set_password
+from middleware.auth import auth_required, set_password
 from helpers.flash import FlashMessage, FlashMessageCategory, flash_message
 from helpers.settings import settings
 from helpers.templates import templates

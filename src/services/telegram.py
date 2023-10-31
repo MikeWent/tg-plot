@@ -27,13 +27,12 @@ async def get_base_telegram_client():
         or not settings.telegram_api_id
         or not settings.telegram_api_hash
         or not settings.telegram_channel_id
-        or not settings.app_data_dir
     ):
         raise SettingsAreEmpty
 
     if not tg:
         tg = TelegramClient(
-            session=settings.app_data_dir + "/" + settings.app_name,
+            session="data/" + settings.app_name,
             api_id=settings.telegram_api_id,
             api_hash=settings.telegram_api_hash,
         )
