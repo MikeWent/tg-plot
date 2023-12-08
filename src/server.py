@@ -34,19 +34,16 @@ async def index(request: Request):
 
 
 # exceptions
-@fastapi_app.exception_handler(errors.TelegramNotAuthorized)
-def redirect_to_telegram_auth(request: Request, exc: errors.TelegramNotAuthorized):
-    flash_message(
-        request=request,
-        message=FlashMessage(category=FlashMessageCategory.warning, title=exc.text),
-    )
-    return RedirectResponse(url="/telegram")
+for error in (errors.TelegramNotAuthorized, errors.SettingsAreEmpty):
 
+    def handler(request: Request, exc: errors.BaseAppException):
+        flash_message(
+            request=request,
+            message=FlashMessage(
+                category=FlashMessageCategory.warning,
+                title=exc.text,
+            ),
+        )
+        return RedirectResponse(url=exc.redirect_to)
 
-@fastapi_app.exception_handler(errors.SettingsAreEmpty)
-def redirect_to_settings(request: Request, exc: errors.SettingsAreEmpty):
-    flash_message(
-        request=request,
-        message=FlashMessage(category=FlashMessageCategory.warning, title=exc.text),
-    )
-    return RedirectResponse(url="/settings")
+    fastapi_app.add_exception_handler(error, handler)

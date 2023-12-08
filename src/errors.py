@@ -1,8 +1,13 @@
-class TelegramNotAuthorized(Exception):
+class BaseAppException(Exception):
+    text: str
+    redirect_to: str
+
+
+class TelegramNotAuthorized(BaseAppException):
     text = "Login into Telegram first"
-    pass
+    redirect_to = "/telegram"
 
 
-class SettingsAreEmpty(Exception):
+class SettingsAreEmpty(BaseAppException):
     text = "Set Telegram & Channel settings"
-    pass
+    redirect_to = "/settings"
